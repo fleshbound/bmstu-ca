@@ -1,5 +1,4 @@
-import newton
-import point_table
+import process
 
 
 def print_menu() -> None:
@@ -24,7 +23,7 @@ while is_working:
     choice = int(input("Номер команды: "))
 
     if choice == 1:
-        pass
+        process.show_value_for_each_power("../data/1.txt")
     elif choice == 2:
         pass
     elif choice == 3:

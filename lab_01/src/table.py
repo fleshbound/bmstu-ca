@@ -39,8 +39,8 @@ def get_nearest_index(point_table, x) -> int:
     return nearest_index
 
 
-def get_config_table(point_table, index, n) -> list:
-    low = high = index
+def get_config_table(point_table, x, n) -> list:
+    low = high = get_nearest_index(point_table, x)
 
     for i in range(0, n, 1):
         if i % 2 != 0:
