@@ -11,7 +11,7 @@ def print_menu() -> None:
 
 
 def print_info() -> None:
-    print("Программа предназначена для реализации алгоритма полиномиальной интерполяции табличных функций")
+    print("Программа предназначена для реализации алгоритма полиномиальной\nинтерполяции табличных функций")
     print("Студент: Авдейкина В.П. (ИУ7-43Б)\n")
 
 
@@ -25,9 +25,9 @@ while is_working:
     if choice == 1:
         process.show_value_for_each_power("../data/1.txt")
     elif choice == 2:
-        pass
+        process.show_backward_interpolation_roots("../data/1.txt")
     elif choice == 3:
-        pass
+        process.find_system_roots("../data/3_1.txt", "../data/3_2.txt")
     elif choice == 4:
         print("")
         print_menu()

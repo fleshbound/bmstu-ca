@@ -15,16 +15,20 @@ def read_point_table(filename) -> list:
 
 
 def print_point_table(point_table) -> None:
-    print("╔" + "═" * 7 + ("╦" + "═" * 12) * 3 + "╗")
-    print("║ {:^5s} ║ {:^10s} ║ {:^10s} ║ {:^10s} ║".format("№", "x", "y", "y\'"))
-    print("╠" + "═" * 7 + ("╬" + "═" * 12) * 3 + "╣")
+    print_separator(4, 7)
+    print("|{:^7s}|{:^7s}|{:^7s}|{:^7s}|".format("№", "x", "y", "y\'"))
+    print_separator(4, 7)
 
     for i in range(len(point_table)):
-        print("║ {:^5d} ║ {:^10.3f} ║ {:^10.3f} ║ {:^10.3f} ║".format(i,
-                                                                      point_table[i].x,
-                                                                      point_table[i].y,
-                                                                      point_table[i].dy))
-    print("╚" + "═" * 7 + ("╩" + "═" * 12) * 3 + "╝\n")
+        print("|{:^7d}|{:^7.3f}|{:^7.3f}|{:^7.3f}|".format(i, point_table[i].x,
+                                                           point_table[i].y,
+                                                           point_table[i].dy))
+    print_separator(4, 7)
+    print("")
+
+
+def print_separator(length, step) -> None:
+    print("+" + ("-" * step + "+") * length)
 
 
 def get_nearest_index(point_table, x) -> int:
@@ -39,7 +43,7 @@ def get_nearest_index(point_table, x) -> int:
     return nearest_index
 
 
-def get_config_table(point_table, x, n) -> list:
+def get_config_table(point_table, n, x) -> list:
     low = high = get_nearest_index(point_table, x)
 
     for i in range(0, n, 1):
@@ -55,3 +59,28 @@ def get_config_table(point_table, x, n) -> list:
                 high += 1
 
     return point_table[low:high + 1]
+
+
+def print_diff_table(diff_table) -> None:
+    length = len(diff_table)
+
+    print_separator(length, 7)
+    print("|{:^7s}|{:^7s}".format("x", "y"), end='')
+
+    for i in range(2, length):
+        print("|{:^7s}".format("y" + "\'" * (i - 1)), end='')
+
+    print("|")
+    print_separator(length, 7)
+
+    for i in range(length - 1):
+        for j in range(length):
+            if j >= length - i:
+                print("|{:^7s}".format(" "), end='')
+            else:
+                print("|{:^7.3f}".format(diff_table[j][i]), end='')
+
+        print("|")
+
+    print_separator(length, 7)
+    print("")
