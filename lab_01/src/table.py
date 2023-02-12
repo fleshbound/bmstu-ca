@@ -1,13 +1,12 @@
-from structures import Point
-
-
 def read_point_table(filename) -> list:
-    point_table = []
+    point_table = [[], [], []]
     f = open(filename)
 
     for line in f.readlines():
         point_list = list(map(float, line.split(" ")))
-        point_table.append(Point(point_list[0], point_list[1], point_list[2]))
+        point_table[0].append(point_list[0])
+        point_table[1].append(point_list[1])
+        point_table[2].append(point_list[2])
 
     f.close()
 
@@ -19,10 +18,11 @@ def print_point_table(point_table) -> None:
     print("|{:^7s}|{:^7s}|{:^7s}|{:^7s}|".format("№", "x", "y", "y\'"))
     print_separator(4, 7)
 
-    for i in range(len(point_table)):
-        print("|{:^7d}|{:^7.3f}|{:^7.3f}|{:^7.3f}|".format(i, point_table[i].x,
-                                                           point_table[i].y,
-                                                           point_table[i].dy))
+    for i in range(len(point_table[0])):
+        print("|{:^7d}|{:^7.3f}|{:^7.3f}|{:^7.3f}|".format(i,
+                                                           point_table[0][i],
+                                                           point_table[1][i],
+                                                           point_table[2][i]))
     print_separator(4, 7)
     print("")
 
@@ -32,12 +32,12 @@ def print_separator(length, step) -> None:
 
 
 def get_nearest_index(point_table, x) -> int:
-    diff = abs(point_table[0].x - x)
+    diff = abs(point_table[0][0] - x)
     nearest_index = 0
 
     for i in range(len(point_table)):
-        if abs(point_table[i].x - x) < diff:
-            diff = abs(point_table[i].x - x)
+        if abs(point_table[0][i] - x) < diff:
+            diff = abs(point_table[0][i] - x)
             nearest_index = i
 
     return nearest_index
@@ -53,12 +53,12 @@ def get_config_table(point_table, n, x) -> list:
             else:
                 low -= 1
         else:
-            if high == len(point_table) - 1:
+            if high == len(point_table[0]) - 1:
                 low -= 1
             else:
                 high += 1
 
-    return point_table[low:high + 1]
+    return [point_table[0][low:high + 1], point_table[1][low:high + 1], point_table[2][low:high + 1]]
 
 
 def print_diff_table(diff_table) -> None:
