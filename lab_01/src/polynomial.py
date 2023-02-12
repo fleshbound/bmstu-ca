@@ -26,12 +26,12 @@ def fill_hermite_diff_table(diff_table, derivatives) -> None:
         curr_y_list = diff_table[i]
 
         for j in range(0, length - i, 1):
-            x_diff = diff_table[0][j] - diff_table[0][j + 1]
+            x_diff = diff_table[0][j] - diff_table[0][j + i]
 
-            if x_diff < EPS:
+            if abs(x_diff) < EPS:
                 new_y = derivatives[j // 2]
             else:
-                new_y = (curr_y_list[j] - curr_y_list[j + 1]) / (diff_table[0][j] - diff_table[0][j + 1])
+                new_y = (curr_y_list[j] - curr_y_list[j + 1]) / x_diff
 
             new_y_list.append(new_y)
 

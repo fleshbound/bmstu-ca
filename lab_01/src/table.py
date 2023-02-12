@@ -35,7 +35,7 @@ def get_nearest_index(point_table, x) -> int:
     diff = abs(point_table[0][0] - x)
     nearest_index = 0
 
-    for i in range(len(point_table)):
+    for i in range(len(point_table[0])):
         if abs(point_table[0][i] - x) < diff:
             diff = abs(point_table[0][i] - x)
             nearest_index = i
