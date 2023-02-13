@@ -1,6 +1,3 @@
-EPS = 1e-10
-
-
 def init_hermite_diff_table(x_list, y_list, is_backward) -> list:
     """Инициализация таблицы разделенных разностей с учетом направления интерполяции (полином Эрмита)"""
 
@@ -20,7 +17,7 @@ def fill_hermite_diff_table(diff_table, derivatives) -> None:
 
     length = len(diff_table[0])
 
-    # length === n + 1 ВСЕГДА
+    # length === n * 2 ВСЕГДА
     for i in range(1, length, 1):
         new_y_list = []
         curr_y_list = diff_table[i]
@@ -28,7 +25,7 @@ def fill_hermite_diff_table(diff_table, derivatives) -> None:
         for j in range(0, length - i, 1):
             x_diff = diff_table[0][j] - diff_table[0][j + i]
 
-            if abs(x_diff) < EPS:
+            if x_diff == 0 and i == 1:
                 new_y = derivatives[j // 2]
             else:
                 new_y = (curr_y_list[j] - curr_y_list[j + 1]) / x_diff
@@ -63,7 +60,7 @@ def fill_newton_diff_table(diff_table) -> None:
         curr_y_list = diff_table[i]
 
         for j in range(0, length - i, 1):
-            new_y = (curr_y_list[j] - curr_y_list[j + 1]) / (diff_table[0][j] - diff_table[0][j + 1])
+            new_y = (curr_y_list[j] - curr_y_list[j + 1]) / (diff_table[0][j] - diff_table[0][j + i])
             new_y_list.append(new_y)
 
         diff_table.append(new_y_list)

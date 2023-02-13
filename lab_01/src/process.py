@@ -27,7 +27,8 @@ def get_hermite_value(point_table, n, x, verbose) -> float:
 
 
 def get_value_for_each_power(point_table, n_list, x) -> tuple:
-    newton_value = hermite_value = []
+    newton_value = []
+    hermite_value = []
     verbose = True if len(n_list) == 1 else False
 
     for n in n_list:
@@ -69,7 +70,7 @@ def get_newton_backward_ip_root(point_table, n) -> float:
 def get_hermite_backward_ip_root(point_table, n) -> float:
     config_table = get_config_table(point_table, n, 0)
     diff_table = polynomial.init_hermite_diff_table(config_table[0], config_table[1], True)
-    polynomial.fill_hermite_diff_table(diff_table, config_table[2])
+    polynomial.fill_hermite_diff_table(diff_table, list(map(lambda x: 1 / x, config_table[2])))
 
     return polynomial.get_value_by_diff_table(diff_table, 0)
 

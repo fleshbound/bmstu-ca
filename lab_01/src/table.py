@@ -47,7 +47,7 @@ def get_config_table(point_table, n, x) -> list:
     low = high = get_nearest_index(point_table, x)
 
     for i in range(0, n, 1):
-        if i % 2 != 0:
+        if i % 2 == 0:
             if low == 0:
                 high += 1
             else:
@@ -68,7 +68,7 @@ def print_diff_table(diff_table) -> None:
     print("|{:^7s}|{:^7s}".format("x", "y"), end='')
 
     for i in range(2, length):
-        print("|{:^7s}".format("y" + "\'" * (i - 1)), end='')
+        print("|{:^7s}".format("y" + "*" * (i - 1)), end='')
 
     print("|")
     print_separator(length, 7)
