@@ -53,7 +53,7 @@ def show_value_for_each_power(filename) -> None:
     print_separator(3, 10)
 
     for i in range(len(n_list)):
-        print("|{:^10d}|{:^10.6f}|{:^10.6f}|".format(n_list[i], newton_list[i], hermite_list[i]))
+        print("|{:^10d}|{:^10.3f}|{:^10.3f}|".format(n_list[i], newton_list[i], hermite_list[i]))
 
     print_separator(3, 10)
     print("")
@@ -88,35 +88,9 @@ def show_backward_interpolation_roots(filename) -> None:
         newton_root = get_newton_backward_ip_root(point_table, n)
         hermite_root = get_hermite_backward_ip_root(point_table, n)
 
-        print("|{:^10d}|{:^10.6f}|{:^10.6f}|".format(n, newton_root, hermite_root))
+        print("|{:^10d}|{:^10.3f}|{:^10.3f}|".format(n, newton_root, hermite_root))
 
     print_separator(3, 10)
-
-
-def fill_system_table(system_table) -> None:
-    table1 = [[], []]
-    table2 = [[], []]
-
-    for i in range(len(system_table)):
-        if system_table[i][1] is not None:
-            table1[0].append(system_table[i][0])
-            table1[1].append(system_table[i][1])
-        else:
-            table2[0].append(system_table[i][0])
-            table2[1].append(system_table[i][2])
-
-    diff_table1 = polynomial.init_newton_diff_table(table1[0], table2[1], False)
-    polynomial.fill_newton_diff_table(diff_table1)
-
-    diff_table2 = polynomial.init_newton_diff_table(table2[0], table2[1], False)
-    polynomial.fill_newton_diff_table(diff_table2)
-
-    for i in range(len(system_table)):
-        if system_table[i][1] is None:
-            system_table[i][1] = polynomial.get_value_by_diff_table(diff_table1, system_table[i][0])
-
-        if system_table[i][2] is None:
-            system_table[i][2] = polynomial.get_value_by_diff_table(diff_table2, system_table[i][0])
 
 
 def subtract_system_table(system_table) -> list:
@@ -130,11 +104,36 @@ def subtract_system_table(system_table) -> list:
     return new_table
 
 
-def find_system_roots(filename1, filename2) -> None:
-    system_table = read_system_table(filename1, filename2)
-    fill_system_table(system_table)
-    diff_system_table = subtract_system_table(system_table)
+def swap_arguments(table) -> None:
+    for i in range(len(table[0])):
+        table[0][i], table[1][i] = table[1][i], table[0][i]
 
-    n = int(input("Введите значение n: "))
-    root = get_newton_backward_ip_root(diff_system_table, n)
+
+def find_system_roots(filename1, filename2) -> None:
+    point_table1, point_table2 = read_system_table(filename1), read_system_table(filename2)
+
+    swap_arguments(point_table1)
+    diff_table1 = polynomial.init_newton_diff_table(point_table1[0], point_table1[1], False)
+    polynomial.fill_newton_diff_table(diff_table1)
+    
+    new_table = [[], [], []]
+    
+    for i in range(len(point_table2[0])):
+        point_table2[2][i] = polynomial.get_value_by_diff_table(diff_table1, point_table2[0][i])
+        
+        new_table[0].append(point_table2[0][i])
+        new_table[1].append(point_table2[1][i] - point_table2[2][i])
+        new_table[2].append(None)
+        
+    print("Новая таблица")
+    print_separator(3, 7)
+    print("|{:^7s}|{:^7s}|{:^7s}|".format("№", "x", "y1-y2"))
+    print_separator(3, 7)
+
+    for i in range(len(new_table[0])):
+        print("|{:^7d}|{:^7.3f}|{:^7.3f}|".format(i, new_table[0][i], new_table[1][i]))
+
+    print_separator(3, 7)
+    
+    root = get_newton_backward_ip_root(new_table, len(new_table[0]))
     print("Решение системы (полином Ньютона): {:.3f}".format(root))

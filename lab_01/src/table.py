@@ -22,7 +22,7 @@ def print_point_table(point_table) -> None:
         print("|{:^7d}|{:^7.3f}|{:^7.3f}|{:^7.3f}|".format(i,
                                                            point_table[0][i],
                                                            point_table[1][i],
-                                                           point_table[2][i]))
+                                                           point_table[2][i] if point_table[2][i] is not None else 0))
 
     print_separator(4, 7)
     print("")
@@ -87,22 +87,14 @@ def print_diff_table(diff_table) -> None:
     print("")
 
 
-def read_system_table(filename1, filename2) -> list:
-    system_table = []
-    f = open(filename1)
+def read_system_table(filename) -> list:
+    system_table = [[], [], []]
+    f = open(filename)
 
     for line in f.readlines():
         dot = list(map(float, line.split(" ")))
-        system_table.append([dot[1], dot[0], None])
-
-    f.close()
-    f = open(filename2)
-
-    for line in f.readlines():
-        dot = list(map(float, line.split(" ")))
-        system_table.append([dot[0], None, dot[1]])
-
-    f.close()
-    system_table.sort()
+        system_table[0].append(dot[0])
+        system_table[1].append(dot[1])
+        system_table[2].append(None)
 
     return system_table
