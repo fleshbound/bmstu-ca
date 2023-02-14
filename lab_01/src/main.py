@@ -20,7 +20,7 @@ print_info()
 print_menu()
 
 while is_working:
-    choice = int(input("Номер команды: "))
+    choice = int(input("Номер команды (4 - меню): "))
 
     if choice == 1:
         process.show_value_for_each_power("../data/1.txt")
