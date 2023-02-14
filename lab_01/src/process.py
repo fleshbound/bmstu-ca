@@ -104,16 +104,10 @@ def subtract_system_table(system_table) -> list:
     return new_table
 
 
-def swap_arguments(table) -> None:
-    for i in range(len(table[0])):
-        table[0][i], table[1][i] = table[1][i], table[0][i]
-
-
 def find_system_roots(filename1, filename2) -> None:
     point_table1, point_table2 = read_system_table(filename1), read_system_table(filename2)
 
-    swap_arguments(point_table1)
-    diff_table1 = polynomial.init_newton_diff_table(point_table1[0], point_table1[1], False)
+    diff_table1 = polynomial.init_newton_diff_table(point_table1[0], point_table1[1], True)
     polynomial.fill_newton_diff_table(diff_table1)
     
     new_table = [[], [], []]
@@ -136,4 +130,4 @@ def find_system_roots(filename1, filename2) -> None:
     print_separator(3, 7)
     
     root = get_newton_backward_ip_root(new_table, len(new_table[0]))
-    print("Решение системы (полином Ньютона): {:.3f}".format(root))
+    print("Решение системы: {:.3f}".format(root))
