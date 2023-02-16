@@ -44,11 +44,17 @@ def get_nearest_index(point_table, x) -> int:
     return nearest_index
 
 
-def get_config_table(point_table, n, x) -> list:
+def get_config_table(point_table, n, x, is_hermit) -> list:
     low = high = get_nearest_index(point_table, x)
+    limit = n
+    start = 0
 
-    for i in range(0, n, 1):
-        if i % 2 == 0:
+    if is_hermit:
+        limit = (n + 1) // 2 - n % 2
+        start = 0
+
+    for i in range(start, limit, 1):
+        if i % 2 != 0:
             if low == 0:
                 high += 1
             else:

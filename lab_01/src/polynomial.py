@@ -1,4 +1,4 @@
-def init_hermite_diff_table(x_list, y_list, is_backward) -> list:
+def init_hermite_diff_table(x_list, y_list, n, is_backward) -> list:
     """Инициализация таблицы разделенных разностей с учетом направления интерполяции (полином Эрмита)"""
 
     diff_table = [[xi for x in x_list for xi in [x, x]],
@@ -8,6 +8,10 @@ def init_hermite_diff_table(x_list, y_list, is_backward) -> list:
     if is_backward:
         diff_table = [[yi for y in y_list for yi in [y, y]],
                       [xi for x in x_list for xi in [x, x]]]
+
+    if (n + 1) % 2 != 0:
+        diff_table[0].pop()
+        diff_table[1].pop()
 
     return diff_table
 

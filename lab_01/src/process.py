@@ -3,7 +3,7 @@ from table import *
 
 
 def get_newton_value(point_table, n, x, verbose) -> float:
-    config_table = get_config_table(point_table, n, x)
+    config_table = get_config_table(point_table, n, x, False)
     diff_table = polynomial.init_newton_diff_table(config_table[0], config_table[1], False)
     polynomial.fill_newton_diff_table(diff_table)
 
@@ -15,8 +15,8 @@ def get_newton_value(point_table, n, x, verbose) -> float:
 
 
 def get_hermite_value(point_table, n, x, verbose) -> float:
-    config_table = get_config_table(point_table, n, x)
-    diff_table = polynomial.init_hermite_diff_table(config_table[0], config_table[1], False)
+    config_table = get_config_table(point_table, n, x, True)
+    diff_table = polynomial.init_hermite_diff_table(config_table[0], config_table[1], n, False)
     polynomial.fill_hermite_diff_table(diff_table, config_table[2])
 
     if verbose:
@@ -60,16 +60,19 @@ def show_value_for_each_power(filename) -> None:
 
 
 def get_newton_backward_ip_root(point_table, n) -> float:
-    config_table = get_config_table(point_table, n, 0)
-    diff_table = polynomial.init_newton_diff_table(config_table[0], config_table[1], True)
+    point_table[0], point_table[1] = point_table[1], point_table[0]
+    config_table = get_config_table(point_table, n, 0, False)
+    diff_table = polynomial.init_newton_diff_table(config_table[1], config_table[0], True)
     polynomial.fill_newton_diff_table(diff_table)
+    # print_diff_table(diff_table)
 
     return polynomial.get_value_by_diff_table(diff_table, 0)
 
 
 def get_hermite_backward_ip_root(point_table, n) -> float:
-    config_table = get_config_table(point_table, n, 0)
-    diff_table = polynomial.init_hermite_diff_table(config_table[0], config_table[1], True)
+    point_table[0], point_table[1] = point_table[1], point_table[0]
+    config_table = get_config_table(point_table, n, 0, True)
+    diff_table = polynomial.init_hermite_diff_table(config_table[0], config_table[1], n, True)
     polynomial.fill_hermite_diff_table(diff_table, list(map(lambda x: 1 / x, config_table[2])))
 
     return polynomial.get_value_by_diff_table(diff_table, 0)
@@ -129,5 +132,8 @@ def find_system_roots(filename1, filename2) -> None:
 
     print_separator(3, 7)
     
-    root = get_newton_backward_ip_root(new_table, len(new_table[0]))
-    print("Решение системы: {:.3f}".format(root))
+    root = get_newton_backward_ip_root(new_table, 3)
+    diff_table2 = polynomial.init_newton_diff_table(point_table2[0], point_table2[1], False)
+    polynomial.fill_newton_diff_table(diff_table2)
+    root_y = polynomial.get_value_by_diff_table(diff_table2, root)
+    print("Решение системы: x= {:.3f}, y = {:.3f}".format(root, root_y))
